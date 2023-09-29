@@ -1,0 +1,6 @@
+#ifndef AED2324_P01_LIBRARY_H
+#define AED2324_P01_LIBRARY_H
+
+void hello();
+
+#endif //AED2324_P01_LIBRARY_H
