@@ -71,7 +71,20 @@ void Dictionary::readFile(ifstream &f) {
 //=============================================================================
 //TODO
 bool Dictionary::update(string w1, string m1) {
-    return true;
+
+    set<WordMean>::iterator it=words.begin();
+    while(it!=words.end()){
+        if(it->getWord()==w1){
+            words.erase(it);
+            this->addWord(WordMean(w1,m1));
+
+            return true;
+        }
+
+        it++;
+    }
+    this->addWord(WordMean(w1,m1));
+    return false;
 }
 
 //=============================================================================
@@ -79,12 +92,59 @@ bool Dictionary::update(string w1, string m1) {
 //=============================================================================
 //TODO
 string Dictionary::consult(string w1, WordMean& previous, WordMean& next) const {
-    return "";
-}
+    /*set<WordMean> words=getWords();
+    std::set<WordMean>::iterator it;
+    for( it=words.begin();it!=words.end();){
+        if(it->getWord()==w1){
+            return it->getMeaning();
+        }
+        if(it->getWord()> w1){
+            next=*it;
+            --it;
+            previous=*it;
+            it++;
+            return "word not found";
+        }
+        it++;*/
+    std::set<WordMean>::iterator value = std::lower_bound(words.begin(), words.end(), WordMean(w1,""));
+    if(value!=words.end() && value->getWord()==w1){
+        return value->getMeaning();}
+    std::set<WordMean>::iterator r=value;
+    std::set<WordMean>::iterator l=--value;
+    if(r!=words.end() and l!=words.end()){
+        next=*r;
+        previous=*l;
+        return "word not found";
+    }
+    else if(r!=words.end() ){
+        next=*r;
+        previous=WordMean("","");
+        return "word not found";
+    }else if(l!=words.end()){
+        previous=*l;
+        next=WordMean("","");
+        return "word not found";
+    }
+
+
+
+
+
+
+    }
+
+
+
+
 
 //=============================================================================
 // Subexercise 1.4: Update Dictionary
 //=============================================================================
 //TODO
 void Dictionary::print() const {
+    for(auto element : words){
+        std::cout<<element.getWord()<<endl;
+        std::cout<<element.getMeaning()<<endl;
+
+    }
 }
